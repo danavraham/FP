@@ -1,5 +1,7 @@
 package javaBeans;
 
+import java.util.ArrayList;
+
 import exeptions.GeneralException;
 
 public class Company extends PropertiesB{
@@ -18,7 +20,7 @@ public class Company extends PropertiesB{
 	}
 
 	public void setName(String name) throws GeneralException {
-		
+	
 		//check characters 2-15
 		if (name.length()<2 || name.length()>15) {
 			throw new GeneralException("Name number of charters must be 2-15");
@@ -33,8 +35,21 @@ public class Company extends PropertiesB{
 		
 	}
 
-    // -------------------constructor------------------
+    // -------------------constructors------------------
+
+	public Company(int id, String email, String password, String name, ArrayList<Coupon> coupons) throws GeneralException {
+		super(id, email, password, coupons);
+		setName(name);
+		
+	}
 	
+	public Company(String email, String password, String name) throws GeneralException {
+		super(email, password);
+		setName(name);
+		
+	}
+	
+
 	public Company(int id, String email, String password, String name) throws GeneralException {
 		super(id, email, password);
 		setName(name);
@@ -44,10 +59,11 @@ public class Company extends PropertiesB{
 	
 	// -------------------methods-----------------
 
+	
+
 	@Override
 	public String toString() {
-		return "Company ["+super.toString() + "name= "
-				+ getName() + "]";
+		return "Company "+super.toString() + "name= " + getName() + "\n";
 	}
 	
 	

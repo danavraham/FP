@@ -1,5 +1,7 @@
 package javaBeans;
 
+import java.util.ArrayList;
+
 import exeptions.GeneralException;
 
 public class Customer extends PropertiesB{
@@ -53,18 +55,31 @@ public class Customer extends PropertiesB{
 	
 
     // -------------------constructors------------------
+	public Customer(int id, String email, String password,String firstName, String lastName, ArrayList<Coupon> coupons) throws GeneralException {
+		super(id, email, password, coupons);
+		setFirstName(firstName);
+		setLastName(lastName);
+	}
+	
 	public Customer(int id, String email, String password,String firstName, String lastName) throws GeneralException {
 		super(id, email, password);
 		setFirstName(firstName);
 		setLastName(lastName);
 	}
 
+	public Customer(String email, String password,String firstName, String lastName) throws GeneralException {
+		super(email, password);
+		setFirstName(firstName);
+		setLastName(lastName);
+	}
+	
+	
 	
 	// -------------------methods-----------------
 	
 	@Override
 	public String toString() {
-		return "Customer [" +super.toString() + ", firstName=" + getFirstName() + ", lastName=" + getLastName() + "]";
+		return "Customer " +super.toString() + ", firstName=" + getFirstName() + ", lastName=" + getLastName() + "\n";
 	}
 	
 

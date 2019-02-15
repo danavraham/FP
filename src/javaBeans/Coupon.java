@@ -81,8 +81,15 @@ public class Coupon extends PropertiesA{
 		return endDate;
 	}
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	public void setEndDate(Date endDate) throws GeneralException {
+		
+		
+		Date thisDate = new Date();
+		if(endDate.after(thisDate) && endDate.after(startDate)) {
+			this.endDate=endDate;
+		}else {
+			throw new GeneralException("End date of coupon must be after start date and not before today!");
+		}
 	}
 
 	public int getAmount() {
@@ -135,6 +142,7 @@ public class Coupon extends PropertiesA{
 		setPrice(price);
 		setImage(image);
 	}
+	
 
 
 	
@@ -142,9 +150,9 @@ public class Coupon extends PropertiesA{
 	
 	@Override
 	public String toString() {
-		return "Customer [" +super.toString() + ", companyId=" + getCompanyId() + ", category=" + getCategory() + ", title=" + getTitle()
+		return "Coupon " +super.toString() + ", companyId=" + getCompanyId() + ", category=" + getCategory() + ", title=" + getTitle()
 				+ ", description=" + getDescription() + ", startDate=" + getStartDate() + ", endDate=" + getEndDate() + ", amount="
-				+ getAmount() + ", price=" + getPrice() + ", image=" + getImage() + "]";
+				+ getAmount() + ", price=" + getPrice() + ", image=" + getImage() + "\n";
 	}
 
 }

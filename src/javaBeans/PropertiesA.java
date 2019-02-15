@@ -17,9 +17,12 @@ public abstract class PropertiesA {
 	public void setId(int id) throws GeneralException {
 		if (id<0) {
 			throw new GeneralException("Id must be bigger than 0");
+			
 		}
 		else{
 			this.id=id;
+		
+
 		}
 	}
 
@@ -28,6 +31,11 @@ public abstract class PropertiesA {
 	public PropertiesA(int id) throws GeneralException {
 		super();
 		setId(id);
+		
+	}
+	public PropertiesA() throws GeneralException {
+		super();
+		
 	}
 	
 	// -------------------methods-----------------
