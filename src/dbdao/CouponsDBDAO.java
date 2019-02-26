@@ -323,6 +323,36 @@ public class CouponsDBDAO implements ICouponsDAO {
 
 	}
 
+	
+	@Override
+	public boolean isCouponExistById(int couponId) throws Exception {
+
+		Connection connection = null;
+
+		try {
+			connection = connectionPool.getConnection();
+
+			String sql = String.format(
+					"SELECT Count(*) AS Count FROM COUPONS WHERE coupon_id = '%d'",
+					couponId);
+
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+				try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+					resultSet.next();
+
+					int count = resultSet.getInt("Count");
+
+					return count == 1;
+				}
+			}
+		} finally {
+			connectionPool.restoreConnection(connection);
+		}
+	}
+	
+//	do I use it in the purchase?
 	@Override
 	public boolean isCouponLeft(int couponId) throws Exception {
 
@@ -331,7 +361,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 		try {
 			connection = connectionPool.getConnection();
 
-			String sql = String.format("SELECT FROM COUPONS WHERE coupon_id = '%d'", couponId);
+			String sql = String.format("SELECT * FROM COUPONS WHERE coupon_id = '%d'", couponId);
 
 			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -341,6 +371,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 
 					if (resultSet.getInt("amount") > 0) {
 
+						
 						return true;
 
 					} else {
@@ -363,7 +394,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 		try {
 			connection = connectionPool.getConnection();
 
-			String sql = String.format("SELECT FROM COUPONS WHERE coupon_id = '%d'", couponId);
+			String sql = String.format("SELECT * FROM COUPONS WHERE coupon_id = '%d'", couponId);
 
 			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -398,7 +429,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 
 			connection = connectionPool.getConnection();
 
-			String sql = String.format("DELETE FROM COUPONS WHERE company_id= '%d' AND customer_id= '%d", companyId);
+			String sql = String.format("DELETE FROM COUPONS WHERE company_id= '%d'", companyId);
 
 			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 				preparedStatement.executeUpdate();
@@ -420,10 +451,11 @@ public class CouponsDBDAO implements ICouponsDAO {
 		try {
 
 			connection = connectionPool.getConnection();
-
+			
 			int couponId = 0;
 			String sql1 = String.format("SELECT * FROM COUPONS WHERE company_id=%d", companyId);
-			String sql2 = String.format("DELETE FROM coupons_vs_customer WHERE coupon_id=%d", couponId);
+			String sql2 = String.format("DELETE FROM CUSTOMERS_VS_COUPONS WHERE coupon_id=%d", couponId);
+													
 
 			try (PreparedStatement preparedStatement1 = connection.prepareStatement(sql1)) {
 
@@ -454,7 +486,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 
 			connection = connectionPool.getConnection();
 
-			String sql = String.format("DELETE FROM coupons_vs_customer WHERE customer_id=%d", customerId);
+			String sql = String.format("DELETE FROM CUSTOMERS_VS_COUPONS WHERE customer_id=%d", customerId);
 
 			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 				preparedStatement.executeUpdate();
@@ -477,7 +509,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 
 			connection = connectionPool.getConnection();
 
-			String sql = String.format("DELETE FROM coupons_vs_customer WHERE ccoupon_id=%d", couponId);
+			String sql = String.format("DELETE FROM CUSTOMERS_VS_COUPONS WHERE coupon_id=%d", couponId);
 
 			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 				preparedStatement.executeUpdate();

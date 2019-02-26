@@ -5,7 +5,9 @@ import java.util.Date;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+
 import dao.ICompaniesDAO;
+import exeptions.GeneralException;
 import javaBeans.Category;
 import javaBeans.Company;
 import javaBeans.Coupon;
@@ -19,8 +21,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	private static ConnectionPool connectionPool = ConnectionPool.getInstance();
 
 	@Override
-	public boolean isCompanyExists(String email, String password) throws Exception {
-
+	public boolean isCompanyExists(String email, String password) throws GeneralException, Exception {
 		Connection connection = null;
 
 		try {
@@ -45,48 +46,125 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 			connectionPool.restoreConnection(connection);
 		}
 	}
-
+	
+	
 	@Override
-	public void addCompany(Company addCompany) throws Exception {
-
+	public boolean isCompanyExistsById(int companyId) throws GeneralException, Exception {
 		Connection connection = null;
-
 		
-
-			try {
-
-				connection = connectionPool.getConnection();
-				String sql = String.format(
-						"INSERT INTO COMPANIES(company_name, company_email, company_password) "
-								+ "VALUES('%s', '%s', '%s')",
-						addCompany.getName(), addCompany.getEmail(), addCompany.getPassword());
-
-				try (PreparedStatement preparedStatement = connection.prepareStatement(sql,
-						PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-					preparedStatement.executeUpdate();
-
-					try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
-						resultSet.next();
-						int id = resultSet.getInt(1);
-						addCompany.setId(id); // Add the new created id into the company object.
-					}
+		try {
+			connection = connectionPool.getConnection();
+			
+			String sql = String.format(
+					"SELECT Count(*) AS Count FROM COMPANIES WHERE company_id = '%d'",
+					companyId);
+			
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+				
+				try (ResultSet resultSet = preparedStatement.executeQuery()) {
+					
+					resultSet.next();
+					
+					int count = resultSet.getInt("Count");
+					
+					return count == 1;
 				}
-			} finally {
-				connectionPool.restoreConnection(connection);
 			}
+		} finally {
+			connectionPool.restoreConnection(connection);
+		}
+	}
 
-			System.out.println("New company has been added");
-		
+	
+	
+	public boolean isCompanyEmailExists(String email) throws Exception {
+	
+		Connection connection = null;
+	
+		try {
+			connection = connectionPool.getConnection();
+	
+			String sql = String.format("SELECT Count(*) AS Count FROM COMPANIES WHERE company_email = '%s'", email);
+	
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+	
+				try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	
+					resultSet.next();
+	
+					int count = resultSet.getInt("Count");
+	
+					return count == 1;
+				}
+			}
+		} finally {
+			connectionPool.restoreConnection(connection);
+		}
+	}
+
+	public boolean isCompanyNameExists(String companyName) throws GeneralException, Exception {
+	
+		Connection connection = null;
+	
+		try {
+			connection = connectionPool.getConnection();
+	
+			String sql = String.format("SELECT Count(*) AS Count FROM COMPANIES WHERE company_name = '%s'",
+					companyName);
+	
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+	
+				try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	
+					resultSet.next();
+	
+					int count = resultSet.getInt("Count");
+	
+					return count == 1;
+				}
+			}
+		} finally {
+			connectionPool.restoreConnection(connection);
+		}
 	}
 
 	@Override
-	public void updateCompany(Company updateCompany) throws Exception {
+	public void addCompany(Company addCompany) throws GeneralException, Exception {
 
 		Connection connection = null;
 
 		try {
 
+			connection = connectionPool.getConnection();
+			String sql = String.format(
+					"INSERT INTO COMPANIES(company_name, company_email, company_password) "
+							+ "VALUES('%s', '%s', '%s')",
+					addCompany.getName(), addCompany.getEmail(), addCompany.getPassword());
+
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql,
+					PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+				preparedStatement.executeUpdate();
+
+				try (ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+					resultSet.next();
+					int id = resultSet.getInt(1);
+					addCompany.setId(id); // Add the new created id into the company object.
+				}
+			}
+		} finally {
+			connectionPool.restoreConnection(connection);
+		}
+		
+	}
+
+	@Override
+	public void updateCompany(Company updateCompany) throws GeneralException, Exception {
+
+		Connection connection = null;
+
+		try {
+			
 			connection = connectionPool.getConnection();
 
 			String sql = String.format(
@@ -106,7 +184,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	}
 
 	@Override
-	public void deleteCompany(int deleteCompanyByID) throws Exception {
+	public void deleteCompany(int deleteCompanyByID) throws GeneralException, Exception {
 
 		Connection connection = null;
 
@@ -127,7 +205,39 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	}
 
 	@Override
-	public ArrayList<Company> getAllCompanies() throws Exception {
+	public Company getOneCompany(int companyID) throws GeneralException, Exception {
+	
+		Connection connection = null;
+	
+		try {
+			connection = connectionPool.getConnection();
+	
+			String sql = String.format("SELECT * FROM COMPANIES WHERE company_id=%d", companyID);
+	
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+	
+				try (ResultSet resultSet = preparedStatement.executeQuery()) {
+	
+					resultSet.next();
+	
+					String name = resultSet.getString("company_name");
+					String email = resultSet.getString("company_email");
+					String password = resultSet.getString("company_password");
+					ArrayList<Coupon> coupons = getAllCompanyCoupons(companyID);
+//					System.out.println(coupons);
+					Company company = new Company(companyID, email, password, name, coupons);
+				
+	
+					return company;
+				}
+			}
+		} finally {
+			connectionPool.restoreConnection(connection);
+		}
+	}
+
+	@Override
+	public ArrayList<Company> getAllCompanies() throws GeneralException, Exception {
 
 		Connection connection = null;
 
@@ -148,7 +258,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 						String email = resultSet.getString("company_email");
 						String password = resultSet.getString("company_password");
 						String name = resultSet.getString("company_name");
-						ArrayList<Coupon> coupons = new ArrayList<>();
+						ArrayList<Coupon> coupons = getAllCompanyCoupons(id);
 
 						Company company = new Company(id, email, password, name, coupons);
 
@@ -164,97 +274,14 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	}
 
 	@Override
-	public Company getOneCompany(int companyID) throws Exception {
-
+	public boolean isCouponTitleExist(int companyId, String couponTitle) throws GeneralException, Exception {
 		Connection connection = null;
 
 		try {
 			connection = connectionPool.getConnection();
 
-			String sql = String.format("SELECT * FROM COMPANIES WHERE company_id=%d", companyID);
-
-			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-				try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-					resultSet.next();
-
-					String name = resultSet.getString("company_name");
-					String email = resultSet.getString("company_email");
-					String password = resultSet.getString("company_password");
-					ArrayList<Coupon> coupons = new ArrayList<>();
-
-					Company company = new Company(companyID, email, password, name, coupons);
-
-					return company;
-				}
-			}
-		} finally {
-			connectionPool.restoreConnection(connection);
-		}
-	}
-
-	public boolean isCompanyEmailExists(String email) throws Exception {
-
-		Connection connection = null;
-
-		try {
-			connection = connectionPool.getConnection();
-
-			String sql = String.format("SELECT Count(*) AS Count FROM COMPANIES WHERE company_email = '%s'", email);
-
-			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-				try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-					resultSet.next();
-
-					int count = resultSet.getInt("Count");
-
-					return count == 1;
-				}
-			}
-		} finally {
-			connectionPool.restoreConnection(connection);
-		}
-	}
-
-	public boolean isCompanyNameExists(String companyName) throws Exception {
-
-		Connection connection = null;
-
-		try {
-			connection = connectionPool.getConnection();
-
-			String sql = String.format("SELECT Count(*) AS Count FROM COMPANIES WHERE company_name = '%s'",
-					companyName);
-
-			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-
-				try (ResultSet resultSet = preparedStatement.executeQuery()) {
-
-					resultSet.next();
-
-					int count = resultSet.getInt("Count");
-
-					return count == 1;
-				}
-			}
-		} finally {
-			connectionPool.restoreConnection(connection);
-		}
-	}
-
-	@Override
-	public boolean isCouponTitleExist(int companyId, String couponTitle) throws Exception {
-		Connection connection = null;
-
-		try {
-			connection = connectionPool.getConnection();
-
-			String sql = String.format(
-					"SELECT Count(*) AS Count FROM COUPONS WHERE company_id = '%d' AND title = '%s'", companyId,
-					couponTitle);
+			String sql = String.format("SELECT Count(*) AS Count FROM COUPONS WHERE company_id = '%d' AND title = '%s'",
+					companyId, couponTitle);
 
 			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
 
@@ -274,7 +301,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	}
 
 	@Override
-	public ArrayList<Coupon> getAllCompanyCoupons(int companyId) throws Exception {
+	public ArrayList<Coupon> getAllCompanyCoupons(int companyId) throws GeneralException, Exception {
 		Connection connection = null;
 
 		try {
@@ -317,7 +344,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	}
 
 	@Override
-	public ArrayList<Coupon> getAllCompanyCouponsByCategory(int companyId, Category category) throws Exception {
+	public ArrayList<Coupon> getAllCompanyCouponsByCategory(int companyId, Category category) throws GeneralException, Exception {
 		Connection connection = null;
 
 		try {
@@ -361,7 +388,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	}
 
 	@Override
-	public ArrayList<Coupon> getAllCompanyCouponsByMaxPrice(int companyId, double maxPrice) throws Exception {
+	public ArrayList<Coupon> getAllCompanyCouponsByMaxPrice(int companyId, double maxPrice) throws GeneralException, Exception {
 		Connection connection = null;
 
 		try {
@@ -403,6 +430,35 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 		} finally {
 			connectionPool.restoreConnection(connection);
 		}
+	}
+
+	@Override
+	public int getCompanyIdByEmailAndPassword(String email, String password) throws GeneralException, Exception {
+
+		Connection connection = null;
+
+		try {
+			connection = connectionPool.getConnection();
+
+			String sql = String.format(
+					"SELECT * FROM COMPANIES WHERE company_email = '%s' AND company_password = '%s'",
+					email, password);
+
+			try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+				try (ResultSet resultSet = preparedStatement.executeQuery()) {
+
+					resultSet.next();
+
+					int id = resultSet.getInt("company_id");
+
+					return id;
+				}
+			}
+		} finally {
+			connectionPool.restoreConnection(connection);
+		}
+
 	}
 
 }

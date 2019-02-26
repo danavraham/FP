@@ -2,6 +2,7 @@ package dao;
 
 import java.util.ArrayList;
 
+import exeptions.GeneralException;
 import javaBeans.Category;
 import javaBeans.Company;
 import javaBeans.Coupon;
@@ -125,5 +126,10 @@ public interface ICompaniesDAO {
 	 * @return True if company name already in the DB, False if dosen't
 	 * @throws Exception
 	 */
-	boolean isCompanyNameExists(String name) throws Exception;;
+	boolean isCompanyNameExists(String name) throws Exception;
+	
+	
+	int getCompanyIdByEmailAndPassword(String email, String password) throws Exception;
+
+	boolean isCompanyExistsById(int companyId) throws GeneralException, Exception;
 }

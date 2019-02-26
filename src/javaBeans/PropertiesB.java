@@ -65,7 +65,7 @@ public abstract class PropertiesB extends PropertiesA {
 		super(id);
 		setPassword(password);
 		setEmail(email);
-		this.coupons = new ArrayList<>();
+		this.coupons = coupons;
 	}
 	
 	public PropertiesB(int id, String email, String password) throws GeneralException {

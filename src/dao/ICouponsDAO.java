@@ -99,4 +99,6 @@ public interface ICouponsDAO {
 	
 	void updateCouponAmount(int couponId, int couponManipulation)throws Exception;
 
+	boolean isCouponExistById(int couponId) throws Exception;
+
 }

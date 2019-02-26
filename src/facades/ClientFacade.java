@@ -9,8 +9,7 @@ public abstract class ClientFacade {
 	ICustomersDAO customersDBDAO = new CustomerDBDAO();
 	ICouponsDAO couponsDBDAO = new CouponsDBDAO();
 
-	public boolean login(String email, String password) {
-
+	public boolean login(String email, String password) throws Exception {
 		return false;
 
 	}

@@ -63,7 +63,7 @@ public class Company extends PropertiesB{
 
 	@Override
 	public String toString() {
-		return "Company "+super.toString() + "name= " + getName() + "\n";
+		return "Company name= " + getName() + ", " + super.toString() +"\n";
 	}
 	
 	

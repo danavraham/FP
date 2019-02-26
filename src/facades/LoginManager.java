@@ -12,7 +12,7 @@ public class LoginManager {
 	ICompaniesDAO companiesDBDAO = new CompaniesDBDAO();
 	ICustomersDAO customersDBDAO = new CustomerDBDAO();
 
-	private static LoginManager INSTANCE = new LoginManager();
+	private static LoginManager instance = new LoginManager();
 
 	// Private constructor suppresses generation of a (public) default constructor
 	private LoginManager() {
@@ -20,28 +20,23 @@ public class LoginManager {
 
 	// Public static method that returns a reference to the instance.
 	public static LoginManager getInstance() {
-		return INSTANCE;
+		return instance;
 
 	}
 
 	public ClientFacade login(String email, String password, ClientType clientType) throws Exception {
 
-		if (clientType == ClientType.Administrator) {
-			if (email == "admin@admin.com" && password == "admin") {
-				return new AdminFacade();
-			}
+		if (clientType.equals(ClientType.Administrator)) {
+			return new AdminFacade(email, password);
 
-		} else if (clientType == ClientType.Company) {
-			if (companiesDBDAO.isCompanyExists(email, password)) {
-				return new CompanyFacade();
-			}
+		} else if (clientType.equals(ClientType.Company)) {
+			return new CompanyFacade(email, password);
 
-		} else if (clientType == ClientType.customer) {
-			if (customersDBDAO.isCustomerExists(email, password)) {
-				return new CompanyFacade();
-			}
-		}
-		return null;
+		} else if (clientType.equals(ClientType.customer)) {
+			return new CustomerFacade(email, password);
+
+		} else
+			return null;
 
 	}
 

@@ -2,6 +2,7 @@ package facades;
 
 import java.util.ArrayList;
 
+import exeptions.GeneralException;
 import javaBeans.Category;
 import javaBeans.Coupon;
 import javaBeans.Customer;
@@ -13,9 +14,17 @@ public class CustomerFacade extends ClientFacade {
 	private int customerId;
 
 	// -----------------------------CTOR-----------------------------------
-	public CustomerFacade() {
-		setCustomerId(customerId);
+	public CustomerFacade(String email, String password) throws Exception {
+	
+		if(!login(email, password)) {
+			throw new GeneralException("Customer log in failed- please try again");
+		}else {
+			this.customerId= customersDBDAO.getCustomerIdByEmailAndPassword(email, password);
 	}
+	
+	
+}
+
 
 	// -----------------------------G&S-----------------------------------
 
@@ -30,10 +39,15 @@ public class CustomerFacade extends ClientFacade {
 	// ----------------------------Methods-----------------------------------
 
 	@Override
-	public boolean login(String email, String password) {
+	public boolean login(String email, String password) throws Exception {
 		
-		// TODO Auto-generated method stub
-		return super.login(email, password);
+		if(customersDBDAO.isCustomerExists(email, password)) {
+			System.out.println("Customer Login Successful");
+			return true;
+		}else {
+			return false;
+		}
+		
 	}
 
 	/**
@@ -46,21 +60,50 @@ public class CustomerFacade extends ClientFacade {
 	 * @throws Exception
 	 */
 	public void purchaseCoupon(Coupon coupon) throws Exception {
-		
-			//check if customer purchased this coupon in the past
-		if (!customersDBDAO.isCouponExistForCustomer(customerId, coupon.getId())
-				//check if this coupon has any left
-				&& couponsDBDAO.isCouponLeft(coupon.getId())
-				//check if this coupon has been  expired
-				&& !couponsDBDAO.isCouponExpiered(coupon.getId())) {
-			
-					couponsDBDAO.addCouponPurchase(customerId, coupon.getId());
-					//reduce this coupon amount by 1
-					couponsDBDAO.updateCouponAmount(coupon.getId(), -1);
-					
-	     	}
+//			check if customer purchased this coupon in the past
+		if (!customersDBDAO.isCouponExistForCustomer(customerId, coupon.getId())){
+//			check if this coupon has any inventory left
+			System.out.println(couponsDBDAO.getOneCoupon(coupon.getId()).getAmount());
+			if(couponsDBDAO.getOneCoupon(coupon.getId()).getAmount()>0) {
+				System.out.println("hi");
+//				check if this coupon has been  expired
+					if(!couponsDBDAO.isCouponExpiered(coupon.getId())) {
 
+//						Purchase 1 coupon
+						couponsDBDAO.addCouponPurchase(customerId, coupon.getId());
+//						reduce this coupon amount by 1
+						couponsDBDAO.updateCouponAmount(coupon.getId(), -1);
+					}else {
+						throw new GeneralException("Cannot purchase coupon, coupon has expired");
+					}
+				
+			}else {
+				throw new GeneralException("Cannot purchase coupon, no more left");
+			}
+		
+		}else {
+			throw new GeneralException("Cannot purchase coupon, already purchased in the past");
+		}
 	}
+
+	
+	
+	//check if customer purchased this coupon in the past
+//	if (!customersDBDAO.isCouponExistForCustomer(customerId, coupon.getId())
+//			//check if this coupon has any inventory left
+//			&& couponsDBDAO.isCouponLeft(coupon.getId())
+//			//check if this coupon has been  expired
+//			&& !couponsDBDAO.isCouponExpiered(coupon.getId())) {
+//		
+//				couponsDBDAO.addCouponPurchase(customerId, coupon.getId());
+//				//reduce this coupon amount by 1
+//				couponsDBDAO.updateCouponAmount(coupon.getId(), -1);
+//				
+//     	}
+//
+//}
+
+
 
 	/**
 	 * getCustomerCoupons() is a method gets all coupons of current customer

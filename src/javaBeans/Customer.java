@@ -79,10 +79,8 @@ public class Customer extends PropertiesB{
 	
 	@Override
 	public String toString() {
-		return "Customer " +super.toString() + ", firstName=" + getFirstName() + ", lastName=" + getLastName() + "\n";
+		return "Customer firstName= "+ getFirstName() + ", lastName= " + getLastName() +" " + super.toString() + "\n";
 	}
-	
-
 	
 
 }

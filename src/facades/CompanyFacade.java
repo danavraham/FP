@@ -2,6 +2,7 @@ package facades;
 
 import java.util.ArrayList;
 
+import exeptions.GeneralException;
 import javaBeans.Category;
 import javaBeans.Company;
 import javaBeans.Coupon;
@@ -17,8 +18,13 @@ public class CompanyFacade extends ClientFacade {
 	private int companyId;
 
 	// -----------------------------CTOR-----------------------------------
-	public CompanyFacade() {
-		setCompanyId(companyId);
+	public CompanyFacade(String email, String password) throws Exception {
+		if (!login(email, password)) {
+			throw new GeneralException("Company log in failed- please try again");
+		} else {
+			this.companyId = companiesDBDAO.getCompanyIdByEmailAndPassword(email, password);
+		}
+
 	}
 
 	// -----------------------------G&S-----------------------------------
@@ -34,9 +40,13 @@ public class CompanyFacade extends ClientFacade {
 	// ----------------------------Methods-----------------------------------
 
 	@Override
-	public boolean login(String email, String password) {
-		// TODO Auto-generated method stub
-		return super.login(email, password);
+	public boolean login(String email, String password) throws Exception {
+		if (companiesDBDAO.isCompanyExists(email, password)) {
+			System.out.println("Company log in successful");
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -47,30 +57,37 @@ public class CompanyFacade extends ClientFacade {
 	 * @throws Exception if company already has this coupon title
 	 */
 	public void addCoupon(Coupon coupon) throws Exception {
-		if (companiesDBDAO.isCouponTitleExist(coupon.getCompanyId(), coupon.getTitle())) {
+		if (!companiesDBDAO.isCouponTitleExist(coupon.getCompanyId(), coupon.getTitle())) {
 			couponsDBDAO.addCoupon(coupon);
 
 		} else {
-			throw new Exception("Coupon title alreade exist for company");
+			throw new Exception("Cannot add coupon - coupon title alreade exist for company");
 		}
 	}
 
 	/**
-	 * updateCoupon() - a method that updates a coupon in the DB after it checks
-	 * company ID isn't changed.
+	 * updateCoupon() - a method that updates a coupon in the DB after it checks if
+	 * coupon ID exist in DB and that company ID isn't changed.
 	 * 
 	 * @param coupon - new Coupon Object to update
 	 * @throws Exception if trying to update company ID
 	 */
 	public void updateCoupon(Coupon coupon) throws Exception {
 
-		if (coupon.getCompanyId() != companiesDBDAO.getOneCompany(coupon.getId()).getId()) {
-
-			couponsDBDAO.updateCoupon(coupon);
+		if (couponsDBDAO.isCouponExistById(coupon.getId())) {
+			if (companiesDBDAO.isCompanyExistsById(coupon.getCompanyId())) {
+//				if (coupon.getCompanyId() == companiesDBDAO.getOneCompany(coupon.getCompanyId()).getId()) {
+				if(coupon.getCompanyId()==couponsDBDAO.getOneCoupon(coupon.getId()).getCompanyId()) {
+					couponsDBDAO.updateCoupon(coupon);
+				} else {
+					throw new Exception("Cannot update coupon  - cannot change company ID");
+				}
+			} else {
+				throw new Exception("Cannot update coupon  - company ID dont exist in DB");
+			}
 		} else {
-			throw new Exception("Cannot update company ID or Coupon ID");
+			throw new Exception("Cannot update coupon - coupon ID dont exist in DB");
 		}
-
 	}
 
 	/**
@@ -81,10 +98,12 @@ public class CompanyFacade extends ClientFacade {
 	 * @throws Exception
 	 */
 	public void deleteCoupon(int couponIdToDelete) throws Exception {
-
+		if(couponsDBDAO.isCouponExistById(couponIdToDelete)) {
 		couponsDBDAO.deleteAllCouponPurchaseByCouponId(couponIdToDelete);
 		couponsDBDAO.deleteCoupon(couponIdToDelete);
-
+		}else {
+			throw new Exception("Cannot delete coupon - coupon ID dont exist in DB");
+		}
 	}
 
 	/**
@@ -111,7 +130,6 @@ public class CompanyFacade extends ClientFacade {
 		return companiesDBDAO.getAllCompanyCouponsByCategory(companyId, category);
 	}
 
-	
 	/**
 	 * getCompanyCouponsByMaxPrice() - a method that gets all the company coupons
 	 * that are up to a maximum price
@@ -125,7 +143,6 @@ public class CompanyFacade extends ClientFacade {
 		return companiesDBDAO.getAllCompanyCouponsByMaxPrice(companyId, maxPrice);
 	}
 
-	
 	/**
 	 * getCompanyDetails() - a method that gets back the company details
 	 * 

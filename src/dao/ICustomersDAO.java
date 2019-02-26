@@ -26,11 +26,22 @@ public interface ICustomersDAO {
 	 * @throws Exception
 	 */
 	boolean isCustomerExists(String email, String password) throws Exception;
+	
+	/**
+	 *  isCustomerExistsById() - a method that gets the customer ID and
+	 * checks if the customer ID exist in the DB
+	 *
+	 * @param customerId  - customerId to check
+	 * @return True if customer ID exist in the DB, False- if the customer ID dose not
+	 *         exist
+	 * @throws Exception
+	 */
+	boolean isCustomerExistsById(int customerId) throws Exception;
 
 	/**
 	 * isCustomerEmailExists() - a method that gets the customer email 
 	 * 
-	 * @param email    - getting the customer email
+	 * @param email - getting the customer email
 	 * @param Password - getting the customer password
 	 * @return True if customer exist in the DB, False- if the customer dose not
 	 *         exist
@@ -112,5 +123,7 @@ public interface ICustomersDAO {
 	ArrayList<Coupon> getAllCustomerCouponsByCategory(int customerId, Category category) throws Exception;
 
 	ArrayList<Coupon> getAllCustomerCouponsByMaxPrice(int customerId, int maxPrice) throws Exception;
+	
+	int getCustomerIdByEmailAndPassword(String email, String password) throws Exception;
 
 }
