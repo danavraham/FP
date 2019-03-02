@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"dao"},{"l":"dbdao"},{"l":"exeptions"},{"l":"facades"},{"l":"javaBeans"},{"l":"jobs"},{"l":"main"}]
