@@ -127,7 +127,7 @@ public interface ICompaniesDAO {
 	 * coupons for the company that are in a specific Category
 	 * 
 	 * @param companyId  company ID to get the coupons for
-	 * @param categoryId category ID to get the coupons for
+	 * @param category category to get the coupons for
 	 * @return an ArrayList of company coupons per specific category
 	 * @throws Exception can throws Exception
 	 */

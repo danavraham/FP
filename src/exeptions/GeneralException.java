@@ -4,7 +4,7 @@ package exeptions;
  * GeneralException class create a new Exception called GeneralException that gets the
  * exception and prints it
  * 
- * @author
+ * @author dan
  */
 public class GeneralException extends Exception {
 
@@ -13,7 +13,7 @@ public class GeneralException extends Exception {
 	/**
 	 * GeneralException() a method that gets the exception and prints it
 	 * 
-	 * @param the string of Exception needs to be printed
+	 * @param message the string of Exception needs to be printed
 	 */
 	public GeneralException(String message) {
 		super(message);

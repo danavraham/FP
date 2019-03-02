@@ -32,7 +32,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	 * checks if the company exist in the DB
 	 * 
 	 * @param email    getting the company email
-	 * @param Password getting the company password
+	 * @param password getting the company password
 	 * @return True if company exist in the DB, False- if the company dose not exist
 	 * @throws Exception can throws Exception
 	 */
@@ -66,7 +66,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	 * isCompanyNameExists() a method that checks if company name is already in the
 	 * DB
 	 * 
-	 * @param name company name to check
+	 * @param companyName company name to check
 	 * @return True if company name already in the DB, False if dosen't
 	 * @throws Exception can throws Exception
 	 */
@@ -257,7 +257,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	 * getOneCompany() a method that gets a single company info from DB by company
 	 * ID
 	 * 
-	 * @param getCompanyByID a company ID to get the info of
+	 * @param companyID a company ID to get the info of
 	 * @return a Company object from DB with all the company data
 	 * @throws Exception can throws Exception
 	 */
@@ -423,7 +423,7 @@ public class CompaniesDBDAO implements ICompaniesDAO {
 	 * coupons for the company that are in a specific Category
 	 * 
 	 * @param companyId  company ID to get the coupons for
-	 * @param categoryId category ID to get the coupons for
+	 * @param category category to get the coupons for
 	 * @return an ArrayList of company coupons per specific category
 	 * @throws Exception can throws Exception
 	 */

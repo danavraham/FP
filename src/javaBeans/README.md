@@ -326,7 +326,8 @@ getCategory() method that gets the coupon category
 ## `public void setCategory(Category category)`
 
 setCategory() Method that sets the coupon category
-
+ 
+* **Parameters:** `category` — the category to set
  * **Exceptions:** `GeneralException` — 
 
 ## `public String getTitle()`

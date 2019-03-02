@@ -382,7 +382,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 	/**
 	 * getOneCoupon() a method that gets a single coupon info from DB by coupon ID
 	 * 
-	 * @param getCouponByID a coupon ID to get the info of
+	 * @param couponID a coupon ID to get the info of
 	 * @return a Coupon object from DB with all the coupon data
 	 * @throws Exception can throws Exception
 	 */
@@ -513,7 +513,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 	 * addCouponPurchase() a method that adds a purchase of a coupon by a customer
 	 * in the coustomers_vs_coupons table in the DB
 	 * 
-	 * @param customerID the customer that purchased ID
+	 * @param customerId the customer that purchased ID
 	 * @param couponId   the coupon purchased ID
 	 * @throws Exception can throws Exception
 	 */
@@ -543,7 +543,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 	 * deleteCouponPurchase() a method that deletes a specific coupon purchase made
 	 * by a specific customer from the coustomers_vs_coupons table in the DB
 	 * 
-	 * @param customerID the customer that purchased ID
+	 * @param customerId the customer that purchased ID
 	 * @param couponId   the coupon purchased ID
 	 * @throws Exception can throws Exception
 	 */
@@ -606,7 +606,7 @@ public class CouponsDBDAO implements ICouponsDAO {
 	 * purchases made by a specific customer from the coustomers_vs_coupons table in
 	 * the DB
 	 * 
-	 * @param couponId the customer ID needs to delete
+	 * @param customerId the customer ID needs to delete
 	 * @throws Exception can throws Exception
 	 */
 	public void deleteAllCouponPurchaseByCustomerId(int customerId) throws Exception {

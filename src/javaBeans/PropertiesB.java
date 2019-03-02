@@ -133,7 +133,7 @@ public abstract class PropertiesB extends PropertiesA {
 	 * setCoupons() Method that sets the coupons ArrayList
 	 * 
 	 * @param coupons coupons ArrayList to set
-	 * @throws GeneralException
+	 * @throws GeneralException can throw GeneralException
 	 */
 	public void setCoupons(ArrayList<Coupon> coupons) {
 		this.coupons = coupons;

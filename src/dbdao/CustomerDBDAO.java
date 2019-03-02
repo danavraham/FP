@@ -31,7 +31,7 @@ public class CustomerDBDAO implements ICustomersDAO {
 	 * checks if the customer exist in the DB
 	 * 
 	 * @param email    getting the customer email
-	 * @param Password getting the customer password
+	 * @param password getting the customer password
 	 * @return True- if customer exist in the DB, False- if the customer dose not
 	 *         exist
 	 * @throws Exception can throws Exception
@@ -102,7 +102,7 @@ public class CustomerDBDAO implements ICustomersDAO {
 	 * the customer email exist in the DB
 	 * 
 	 * @param email    getting the customer email
-	 * @param Password getting the customer password
+	 * @param password getting the customer password
 	 * @return True- if customer exist in the DB, False- if the customer dose not
 	 *         exist
 	 * @throws Exception can throws Exception
@@ -421,7 +421,7 @@ public class CustomerDBDAO implements ICustomersDAO {
 	 * customer purchased coupons from specific category
 	 * 
 	 * @param customerId customer id to check coupons of
-	 * @param categoryId the category of coupons to return
+	 * @param category the category of coupons to return
 	 * @return ArrayList of coupons purchased by customer for specific category
 	 * @throws Exception can throws Exception
 	 */

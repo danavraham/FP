@@ -25,7 +25,7 @@ public class CustomerFacade extends ClientFacade {
 	/**
 	 * getCompanyId() a method that gets the customer ID
 	 * 
-	 * @return
+	 * @return customerId
 	 */
 	public int getCustomerId() {
 		return customerId;
@@ -92,7 +92,7 @@ public class CustomerFacade extends ClientFacade {
 	 * expired. once purchased, the amount of coupons reduced by 1
 	 * 
 	 * @param coupon - a Coupon object to be purchased by current customer
-	 * @throws Exception
+	 * @throws Exception can throw Exception
 	 */
 	public void purchaseCoupon(Coupon coupon) throws Exception {
 		// check if customer did not purchased this coupon in the past

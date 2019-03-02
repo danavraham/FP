@@ -139,7 +139,7 @@ public interface ICouponsDAO {
 	 * purchases made by a specific customer from the coustomers_vs_coupons table in
 	 * the DB
 	 * 
-	 * @param couponId the customer ID needs to delete
+	 * @param customerId the customer ID needs to delete
 	 * @throws Exception can throws Exception
 	 */
 	void deleteAllCouponPurchaseByCustomerId(int customerId) throws Exception;

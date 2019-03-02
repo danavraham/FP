@@ -36,7 +36,7 @@ isCompanyExists() a method that gets the company email and password and checks i
 
 isCompanyNameExists() a method that checks if company name is already in the DB
 
- * **Parameters:** `name` — company name to check
+ * **Parameters:** `companyName` — company name to check
  * **Returns:** True if company name already in the DB, False if dosen't
  * **Exceptions:** `Exception` — can throws Exception
 
@@ -83,7 +83,7 @@ deleteCompany() a method that deletes a company from the companies table in the 
 
 getOneCompany() a method that gets a single company info from DB by company ID
 
- * **Parameters:** `getCompanyByID` — a company ID to get the info of
+ * **Parameters:** `companyID` — a company ID to get the info of
  * **Returns:** a Company object from DB with all the company data
  * **Exceptions:** `Exception` — can throws Exception
 
@@ -118,7 +118,7 @@ getAllCompanyCouponsByCategory() a method that returns from the DB all the coupo
 
  * **Parameters:**
    * `companyId` — company ID to get the coupons for
-   * `categoryId` — category ID to get the coupons for
+   * `category` — category to get the coupons for
  * **Returns:** an ArrayList of company coupons per specific category
  * **Exceptions:** `Exception` — can throws Exception
 
@@ -254,7 +254,7 @@ getAllCustomerCouponsByCategory() a method that returns all the specific custome
 
  * **Parameters:**
    * `customerId` — customer id to check coupons of
-   * `categoryId` — the category of coupons to return
+   * `category` — the category of coupons to return
  * **Returns:** ArrayList of coupons purchased by customer for specific category
  * **Exceptions:** `Exception` — can throws Exception
 
@@ -364,7 +364,7 @@ deleteAllCompanyCoupons() a method that deletes all company coupons from the cou
 
 getOneCoupon() a method that gets a single coupon info from DB by coupon ID
 
- * **Parameters:** `getCouponByID` — a coupon ID to get the info of
+ * **Parameters:** `couponID` — a coupon ID to get the info of
  * **Returns:** a Coupon object from DB with all the coupon data
  * **Exceptions:** `Exception` — can throws Exception
 
@@ -413,11 +413,11 @@ deleteAllCouponPurchaseByCouponId() a method that deletes all the coupon purchas
  * **Parameters:** `couponId` — the coupon ID needs to delete
  * **Exceptions:** `Exception` — can throws Exception
 
-## `public void deleteAllCouponPurchaseByCustomerId(int customerId) throws Exception`
+## `public void deleteAllCouponPurchaseByCustomerId(int deleteAllCouponPurchaseByCustomerId) throws Exception`
 
 deleteAllCouponPurchaseByCustomerId() a method that deletes all the coupon purchases made by a specific customer from the coustomers_vs_coupons table in the DB
 
- * **Parameters:** `couponId` — the customer ID needs to delete
+ * **Parameters:** `deleteAllCouponPurchaseByCustomerId` — the customer ID needs to delete
  * **Exceptions:** `Exception` — can throws Exception
 
 ## `public void deleteAllCouponPurchaseByCompanyId(int companyId) throws Exception`

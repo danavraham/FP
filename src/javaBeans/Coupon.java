@@ -93,8 +93,9 @@ public class Coupon extends PropertiesA {
 
 	/**
 	 * setCategory() Method that sets the coupon category
-	 * 
-	 * @throws GeneralException
+	 *  
+	 * @param category the category to set
+	 * @throws GeneralException can throw GeneralException
 	 */
 	public void setCategory(Category category) {
 		this.category = category;

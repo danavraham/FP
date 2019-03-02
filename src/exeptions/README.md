@@ -13,4 +13,4 @@ GeneralException class create a new Exception called GeneralException that gets 
 
 GeneralException() a method that gets the exception and prints it
 
- * **Parameters:** `the` — string of Exception needs to be printed
+ * **Parameters:** `message` — the string of Exception needs to be printed

@@ -376,7 +376,7 @@ deleteCouponPurchase() a method that deletes a specific coupon purchase made by 
 
 deleteAllCouponPurchaseByCouponId() a method that deletes all the coupon purchases made of a specific coupon from the coustomers_vs_coupons table in the DB
 
- * **Parameters:** `couponId` — the coupon ID needs to delete
+ * **Parameters:** `customerId` — the coupon ID needs to delete
  * **Exceptions:** `Exception` — can throws Exception
 
 ## `void deleteAllCouponPurchaseByCustomerId(int customerId) throws Exception`
